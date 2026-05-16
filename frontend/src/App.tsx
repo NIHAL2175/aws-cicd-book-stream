@@ -16,9 +16,8 @@ import {
 import { Bar, Pie } from 'react-chartjs-2';
 import { useEffect, useState } from 'react';
 import { Book } from './models/Books';
-// import { Author } from './models/Author';
 
-const API_URL = "http://localhost:5000";
+const API_URL = "/api"; // ✅ Fixed: uses relative URL, works on any host
 
 ChartJS.register(
   ArcElement,
@@ -54,14 +53,11 @@ const barChartOptions = {
 
 function App() {
   const [books, setBooks] = useState<Book[]>([]);
-  // const [authors, setAuthors] = useState<Author[]>([]);
   const [booksBarChartData, setBooksBarChartData] = useState<ChartData<"bar">>();
-  // const [authorsBarChartData, setAuthorsBarChartData] = useState<ChartData<"bar">>();
   const [pieChartData, setPieChartData] = useState<ChartData<"pie">>();
 
   useEffect(() => {
     fetchBooks();
-    // fetchAuthors();
   }, [])
 
   useEffect(() => {
@@ -75,37 +71,14 @@ function App() {
           {
             label: "Total Pages",
             data: data,
-            backgroundColor: generateColors(data.length), // Adjust for desired number of colors
-            borderColor: generateColors(data.length), // Adjust for desired number of colors
+            backgroundColor: generateColors(data.length),
+            borderColor: generateColors(data.length),
             borderWidth: 1,
           }
         ]
       })
     }
   }, [books]);
-
-  // useEffect(() => {
-  //   if (authors) {
-  //     const labels = authors.map(author => author.name);
-  //     const data = authors.map(author => author.birthday).map(birthday => {
-  //       const today = new Date();
-  //       const diffInMs = today.getTime() - new Date(birthday).getTime();
-  //       const age = Math.floor(diffInMs / (1000 * 60 * 60 * 24 * 365));
-  //       return age;
-  //     });
-
-  //     setAuthorsBarChartData({
-  //       labels,
-  //       datasets: [
-  //         {
-  //           label: "Age",
-  //           data: data,
-  //           backgroundColor: 'rgba(53, 162, 235, 0.5)'
-  //         }
-  //       ]
-  //     })
-  //   }
-  // }, [authors]);
 
   useEffect(() => {
     if (books) {
@@ -127,8 +100,8 @@ function App() {
           {
             label: 'Book Count',
             data: Array.from(authorBookCount.values()),
-            backgroundColor: generateColors(authorBookCount.size), // Adjust for desired number of colors
-            borderColor: generateColors(authorBookCount.size), // Adjust for desired number of colors
+            backgroundColor: generateColors(authorBookCount.size),
+            borderColor: generateColors(authorBookCount.size),
             borderWidth: 1,
           },
         ],
@@ -149,15 +122,13 @@ function App() {
 
   const fetchBooks = async () => {
     try {
-      console.log("Fetching from API URL:", `${API_URL}/books`);
-      const response = await fetch(`${API_URL}/books`);
+      const response = await fetch(`${API_URL}/books`); // ✅ calls /api/books
       const { books, message } = await response.json();
 
       if (!response.ok) {
         throw new Error(message);
       }
 
-      console.log("API Response:", books);
       if (books && books.length > 0) {
         setBooks(books);
       } else {
@@ -165,7 +136,6 @@ function App() {
       }
     } catch (error) {
       console.log("API Error:", error);
-      console.log("Using fallback mock data");
       setBooks([
         { id: 1, title: 'Fiction', pages: 10, name: 'Fiction', releaseDate: '', description: '', createdAt: '', updatedAt: '' },
         { id: 2, title: 'Sci-Fi', pages: 5, name: 'Sci-Fi', releaseDate: '', description: '', createdAt: '', updatedAt: '' },
@@ -173,21 +143,6 @@ function App() {
       ] as any);
     }
   };
-
-  // const fetchAuthors = async () => {
-  //   try {
-  //     const response = await fetch(`${API_URL}/authors`);
-  //     const { authors, message } = await response.json();
-
-  //     if (!response.ok) {
-  //       throw new Error(message);
-  //     }
-
-  //     setAuthors(authors);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
 
   return (
     <div className='h-screen font-mono p-4'>
@@ -212,9 +167,6 @@ function App() {
               display: "block", boxSizing: "border-box", height: "500px", width: "900px"
             }} width={1800} height={900} options={barChartOptions} data={booksBarChartData} />)}
           </div>
-          {/* <div>
-            {authorsBarChartData && (<Bar width={700} options={barChartOptions} data={authorsBarChartData} />)}
-          </div> */}
         </div>
       </main>
     </div>

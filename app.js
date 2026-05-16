@@ -1,24 +1,24 @@
 const express = require('express');
-const mysql = require('mysql2');
 const bodyParser = require('body-parser');
 const routes = require('./routes');
 const cors = require('cors');
-const db = require('./configs/db'); // Import the db connection
+const path = require('path');
+const db = require('./configs/db');
 
 const app = express();
 
 app.use(cors());
 app.use(bodyParser.json());
 
-//db.connect((err) => {
-//   if (err) {
-//      console.error('Error connecting to MySQL: ' + err.stack);
-//      return;
-//   }
-//   console.log('Connected to MySQL Database');
-//});
+// API routes
+app.use('/api', routes);
 
-// Add your routes here
-app.use('/', routes);
+// Serve frontend (Vite builds to 'frontend/dist')
+app.use(express.static(path.join(__dirname, 'frontend/dist')));
+
+// Catch-all: send index.html for any non-API route
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'frontend/dist', 'index.html'));
+});
 
 module.exports = app;

@@ -9,7 +9,8 @@ import { Author } from './models/Author';
 import { AddEditAuthorModal } from './components/AddEditAuthorModal';
 import { ViewAuthorModal } from './components/ViewAuthorModal';
 import { DeleteAuthorModal } from './components/DeleteAuthorModal';
-const API_URL = "http://localhost:5000";
+
+const API_URL = "/api"; // ✅ Fixed: uses relative URL, works on any host
 
 const columns = [
    {
@@ -72,7 +73,7 @@ function AuthorsPage() {
 
    const fetchAuthors = async () => {
       try {
-         const response = await fetch(`${API_URL}/authors`);
+         const response = await fetch(`${API_URL}/authors`); // ✅ calls /api/authors
          const { authors, message } = await response.json();
 
          if (!response.ok) {
@@ -82,158 +83,99 @@ function AuthorsPage() {
          setAuthors(authors);
       } catch (error) {
          console.log(error);
-
          setMessage((error as Error).message);
          setIsErrorAlertVisible(true);
-
-         setTimeout(() => {
-            setIsErrorAlertVisible(false);
-         }, 5000);
+         setTimeout(() => { setIsErrorAlertVisible(false); }, 5000);
       }
    };
 
    const editAuthor = async (author: Author) => {
       try {
          if (activeAuthor) {
-            const response = await fetch(`${API_URL}/authors/${activeAuthor.id}`, {
+            const response = await fetch(`${API_URL}/authors/${activeAuthor.id}`, { // ✅ Fixed
                method: 'PUT',
-               headers: {
-                  'Content-Type': 'application/json',
-               },
+               headers: { 'Content-Type': 'application/json' },
                body: JSON.stringify(author),
             });
             const { message, authors } = await response.json();
 
-            if (!response.ok) {
-               throw new Error(message);
-            }
+            if (!response.ok) throw new Error(message);
 
             setAuthors(authors);
             setMessage(message);
             setIsSuccessAlertVisible(true);
-
-            setTimeout(() => {
-               setIsSuccessAlertVisible(false);
-            }, 5000);
+            setTimeout(() => { setIsSuccessAlertVisible(false); }, 5000);
          }
       } catch (error) {
          console.error(error);
-
          setMessage((error as Error).message);
          setIsErrorAlertVisible(true);
-
-         setTimeout(() => {
-            setIsErrorAlertVisible(false);
-         }, 5000);
+         setTimeout(() => { setIsErrorAlertVisible(false); }, 5000);
       }
    }
 
    const addAuthor = async (author: Author) => {
       try {
-         const response = await fetch(`${API_URL}/authors`, {
+         const response = await fetch(`${API_URL}/authors`, { // ✅ Fixed
             method: 'POST',
-            headers: {
-               'Content-Type': 'application/json',
-            },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(author),
          });
          const { message, authors } = await response.json();
- 
-         if (!response.ok) {
-            throw new Error(message);
-         }
+
+         if (!response.ok) throw new Error(message);
 
          setAuthors(authors);
          setMessage(message);
          setIsSuccessAlertVisible(true);
-
-         setTimeout(() => {
-            setIsSuccessAlertVisible(false);
-         }, 5000);
+         setTimeout(() => { setIsSuccessAlertVisible(false); }, 5000);
       } catch (error) {
          console.error(error);
-
          setMessage((error as Error).message);
          setIsErrorAlertVisible(true);
-
-         setTimeout(() => {
-            setIsErrorAlertVisible(false);
-         }, 5000);
+         setTimeout(() => { setIsErrorAlertVisible(false); }, 5000);
       }
    }
 
    const authorAddEdit = (author: Author) => {
-      if (isEdit) {
-         editAuthor(author);
-         return;
-      }
-
+      if (isEdit) { editAuthor(author); return; }
       addAuthor(author);
    }
 
    const authorDelete = async () => {
       try {
          if (activeAuthor) {
-            const response = await fetch(`${API_URL}/authors/${activeAuthor.id}`, {
+            const response = await fetch(`${API_URL}/authors/${activeAuthor.id}`, { // ✅ Fixed
                method: 'DELETE',
-               headers: {
-                  'Content-Type': 'application/json',
-               }
+               headers: { 'Content-Type': 'application/json' }
             });
             const { message, authors } = await response.json();
 
-            if (!response.ok) {
-               throw new Error(message);
-            }
+            if (!response.ok) throw new Error(message);
 
             setAuthors(authors);
             setMessage(message);
             setIsSuccessAlertVisible(true);
-
-            setTimeout(() => {
-               setIsSuccessAlertVisible(false);
-            }, 5000);
+            setTimeout(() => { setIsSuccessAlertVisible(false); }, 5000);
          }
       } catch (error) {
          console.error(error);
-
          setMessage((error as Error).message);
          setIsErrorAlertVisible(true);
-
-         setTimeout(() => {
-            setIsErrorAlertVisible(false);
-         }, 5000);
+         setTimeout(() => { setIsErrorAlertVisible(false); }, 5000);
       }
    }
 
-   const handleAuthorAdd = () => {
-      setActiveAuthor(undefined);
-      setIsEdit(false);
-      setIsAddEditModalOpen(true);
-   }
-
-   const handleAuthorEdit = (author: Author) => {
-      setActiveAuthor(author);
-      setIsEdit(true);
-      setIsAddEditModalOpen(true);
-   }
-
-   const handleAuthorView = (author: Author) => {
-      setActiveAuthor(author);
-      setIsViewModalOpen(true);
-   }
-
-   const handleAuthorDelete = (author: Author) => {
-      setActiveAuthor(author);
-      setIsDeleteModalOpen(true);
-   }
+   const handleAuthorAdd = () => { setActiveAuthor(undefined); setIsEdit(false); setIsAddEditModalOpen(true); }
+   const handleAuthorEdit = (author: Author) => { setActiveAuthor(author); setIsEdit(true); setIsAddEditModalOpen(true); }
+   const handleAuthorView = (author: Author) => { setActiveAuthor(author); setIsViewModalOpen(true); }
+   const handleAuthorDelete = (author: Author) => { setActiveAuthor(author); setIsDeleteModalOpen(true); }
 
    const formatAuthorsForDisplay = (authors: Author[]) => {
       if (authors.length > 0) {
          const dataSource = [];
-
          for (const author of authors) {
-            const authorObj = {
+            dataSource.push({
                key: author.id,
                id: author.id,
                name: author.name,
@@ -248,11 +190,8 @@ function AuthorsPage() {
                      <Button type='primary' icon={<IconDelete />} danger onClick={() => handleAuthorDelete(author)} />
                   </div>
                )
-            }
-
-            dataSource.push(authorObj);
+            });
          }
-
          setDataSource(dataSource);
       }
    }
@@ -270,22 +209,8 @@ function AuthorsPage() {
                <Button type='primary' size='large' className='rounded-none' onClick={handleAuthorAdd}>
                   <span className='font-bold'>+</span>&nbsp; Add Author
                </Button>
-               {isSuccessAlertVisible && (
-                  <Alert
-                     message={message}
-                     type="success"
-                     showIcon
-                     closable
-                  />
-               )}
-               {isErrorAlertVisible && (
-                  <Alert
-                  message={message}
-                     type="error"
-                     showIcon
-                     closable
-                  />
-               )}
+               {isSuccessAlertVisible && <Alert message={message} type="success" showIcon closable />}
+               {isErrorAlertVisible && <Alert message={message} type="error" showIcon closable />}
             </div>
             <div>
                <Table dataSource={dataSource} columns={columns} size="middle" />

@@ -10,49 +10,18 @@ import { ViewBookModal } from './components/ViewBookModal';
 import { DeleteBookModal } from './components/DeleteBookModal';
 import { Book, BookDTO, BookFormDTO } from './models/Books';
 import { Author } from './models/Author';
-const API_URL = "http://localhost:5000";
+
+const API_URL = "/api"; // ✅ Fixed: uses relative URL, works on any host
 
 const columns = [
-  {
-    title: 'ID',
-    dataIndex: 'id',
-    key: 'id',
-  },
-  {
-    title: 'Title',
-    dataIndex: 'title',
-    key: 'title',
-  },
-  {
-    title: 'Description',
-    dataIndex: 'description',
-    key: 'description',
-  },
-  {
-    title: 'Release Date',
-    dataIndex: 'releaseDate',
-    key: 'releaseDate',
-  },
-  {
-    title: 'Author',
-    dataIndex: 'author',
-    key: 'author',
-  },
-  {
-    title: 'Created Date',
-    dataIndex: 'createdAt',
-    key: 'createdAt',
-  },
-  {
-    title: 'Updated Date',
-    dataIndex: 'updatedAt',
-    key: 'updatedAt',
-  },
-  {
-    title: 'Actions',
-    dataIndex: 'actions',
-    key: 'actions',
-  },
+  { title: 'ID', dataIndex: 'id', key: 'id' },
+  { title: 'Title', dataIndex: 'title', key: 'title' },
+  { title: 'Description', dataIndex: 'description', key: 'description' },
+  { title: 'Release Date', dataIndex: 'releaseDate', key: 'releaseDate' },
+  { title: 'Author', dataIndex: 'author', key: 'author' },
+  { title: 'Created Date', dataIndex: 'createdAt', key: 'createdAt' },
+  { title: 'Updated Date', dataIndex: 'updatedAt', key: 'updatedAt' },
+  { title: 'Actions', dataIndex: 'actions', key: 'actions' },
 ];
 
 function BooksPage() {
@@ -80,193 +49,113 @@ function BooksPage() {
 
   const fetchBooks = async () => {
     try {
-      const response = await fetch(`${API_URL}/books`);
+      const response = await fetch(`${API_URL}/books`); // ✅ calls /api/books
       const { books, message } = await response.json();
-
-      if (!response.ok) {
-        throw new Error(message);
-      }
-
+      if (!response.ok) throw new Error(message);
       setBooks(books);
     } catch (error) {
       console.log(error);
-
       setMessage((error as Error).message);
       setIsErrorAlertVisible(true);
-
-      setTimeout(() => {
-        setIsErrorAlertVisible(false);
-      }, 5000);
+      setTimeout(() => { setIsErrorAlertVisible(false); }, 5000);
     }
   };
 
   const fetchAuthors = async () => {
     try {
-      const response = await fetch(`${API_URL}/authors`);
+      const response = await fetch(`${API_URL}/authors`); // ✅ calls /api/authors
       const { authors, message } = await response.json();
-
-      if (!response.ok) {
-        throw new Error(message);
-      }
-
+      if (!response.ok) throw new Error(message);
       setAuthors(authors);
     } catch (error) {
       console.log(error);
-
       setMessage((error as Error).message);
       setIsErrorAlertVisible(true);
-
-      setTimeout(() => {
-        setIsErrorAlertVisible(false);
-      }, 5000);
+      setTimeout(() => { setIsErrorAlertVisible(false); }, 5000);
     }
   };
 
   const editBook = async (book: BookFormDTO) => {
     try {
       if (activeBook) {
-        const response = await fetch(`${API_URL}/books/${activeBook.id}`, {
+        const response = await fetch(`${API_URL}/books/${activeBook.id}`, { // ✅ Fixed
           method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-          },
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(book),
         });
-
         const { message, books } = await response.json();
-
-        if (!response.ok) {
-          throw new Error(message);
-        }
-
+        if (!response.ok) throw new Error(message);
         setBooks(books);
         setMessage(message);
         setIsSuccessAlertVisible(true);
-
-        setTimeout(() => {
-          setIsSuccessAlertVisible(false);
-        }, 5000);
+        setTimeout(() => { setIsSuccessAlertVisible(false); }, 5000);
       }
     } catch (error) {
       console.error(error);
-
       setMessage((error as Error).message);
       setIsErrorAlertVisible(true);
-
-      setTimeout(() => {
-        setIsErrorAlertVisible(false);
-      }, 5000);
+      setTimeout(() => { setIsErrorAlertVisible(false); }, 5000);
     }
   }
 
   const addBook = async (book: BookFormDTO) => {
     try {
-      const response = await fetch(`${API_URL}/books`, {
+      const response = await fetch(`${API_URL}/books`, { // ✅ Fixed
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(book),
       });
-
       const { message, books } = await response.json();
-
-      if (!response.ok) {
-        throw new Error(message);
-      }
-
+      if (!response.ok) throw new Error(message);
       setBooks(books);
       setMessage(message);
       setIsSuccessAlertVisible(true);
-
-      setTimeout(() => {
-        setIsSuccessAlertVisible(false);
-      }, 5000);
+      setTimeout(() => { setIsSuccessAlertVisible(false); }, 5000);
     } catch (error) {
       console.error(error);
-
       setMessage((error as Error).message);
       setIsErrorAlertVisible(true);
-
-      setTimeout(() => {
-        setIsErrorAlertVisible(false);
-      }, 5000);
+      setTimeout(() => { setIsErrorAlertVisible(false); }, 5000);
     }
   }
 
   const bookAddEdit = (book: BookFormDTO) => {
-    if (isEdit) {
-      editBook(book);
-      return;
-    }
-
+    if (isEdit) { editBook(book); return; }
     addBook(book);
   }
 
   const bookDelete = async () => {
     try {
       if (activeBook) {
-        const response = await fetch(`${API_URL}/books/${activeBook.id}`, {
+        const response = await fetch(`${API_URL}/books/${activeBook.id}`, { // ✅ Fixed
           method: 'DELETE',
-          headers: {
-            'Content-Type': 'application/json',
-          }
+          headers: { 'Content-Type': 'application/json' }
         });
-
         const { message, books } = await response.json();
-
-        if (!response.ok) {
-          throw new Error(message);
-        }
-
+        if (!response.ok) throw new Error(message);
         setBooks(books);
         setMessage(message);
         setIsSuccessAlertVisible(true);
-
-        setTimeout(() => {
-          setIsSuccessAlertVisible(false);
-        }, 5000);
+        setTimeout(() => { setIsSuccessAlertVisible(false); }, 5000);
       }
     } catch (error) {
       console.error(error);
-
       setMessage((error as Error).message);
       setIsErrorAlertVisible(true);
-
-      setTimeout(() => {
-        setIsErrorAlertVisible(false);
-      }, 5000);
+      setTimeout(() => { setIsErrorAlertVisible(false); }, 5000);
     }
   }
 
-  const handleBookAdd = () => {
-    setActiveBook(undefined);
-    setIsEdit(false);
-    setIsAddEditModalOpen(true);
-  }
-
-  const handleBookEdit = (book: Book) => {
-    setActiveBook(book);
-    setIsEdit(true);
-    setIsAddEditModalOpen(true);
-  }
-
-  const handleBookView = (book: Book) => {
-    setActiveBook(book);
-    setIsViewModalOpen(true);
-  }
-
-  const handleBookDelete = (book: Book) => {
-    setActiveBook(book);
-    setIsDeleteModalOpen(true);
-  }
+  const handleBookAdd = () => { setActiveBook(undefined); setIsEdit(false); setIsAddEditModalOpen(true); }
+  const handleBookEdit = (book: Book) => { setActiveBook(book); setIsEdit(true); setIsAddEditModalOpen(true); }
+  const handleBookView = (book: Book) => { setActiveBook(book); setIsViewModalOpen(true); }
+  const handleBookDelete = (book: Book) => { setActiveBook(book); setIsDeleteModalOpen(true); }
 
   const formatBooksForDisplay = (books: Book[]) => {
     if (books.length > 0) {
       const dataSource: BookDTO[] = [];
-
       for (const book of books) {
-        const bookObj = {
+        dataSource.push({
           key: book.id,
           id: book.id,
           title: book.title,
@@ -283,11 +172,8 @@ function BooksPage() {
               <Button type='primary' icon={<IconDelete />} danger onClick={() => handleBookDelete(book)} />
             </div>
           )
-        }
-
-        dataSource.push(bookObj);
+        });
       }
-
       setDataSource(dataSource);
     }
   }
@@ -305,22 +191,8 @@ function BooksPage() {
           <Button type='primary' size='large' className='rounded-none' onClick={handleBookAdd}>
             <span className='font-bold'>+</span>&nbsp; Add Book
           </Button>
-          {isSuccessAlertVisible && (
-            <Alert
-              message={message}
-              type="success"
-              showIcon
-              closable
-            />
-          )}
-          {isErrorAlertVisible && (
-            <Alert
-              message={message}
-              type="error"
-              showIcon
-              closable
-            />
-          )}
+          {isSuccessAlertVisible && <Alert message={message} type="success" showIcon closable />}
+          {isErrorAlertVisible && <Alert message={message} type="error" showIcon closable />}
         </div>
         <div>
           <Table dataSource={dataSource} columns={columns} size="middle" />
