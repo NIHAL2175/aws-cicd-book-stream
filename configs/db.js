@@ -4,7 +4,7 @@ const db = mysql.createConnection({
    host: 'localhost',
    port: '3306',
    user: 'root',
-   password: 'Insshaallah@24680',
+   password: 'DB_PASSWORD',
    database: 'react_node_app'
 });
 
