@@ -9,19 +9,17 @@ phases:
     commands:
       - echo Installing root dependencies
       - npm install
-
       - echo Installing frontend dependencies
-      - cd frontend
-      - npm install
-      - cd ..
+      - cd frontend && npm install && cd ..
 
   build:
     commands:
       - echo Building frontend
-      - cd frontend
-      - npm run build
-      - cd ..
+      - cd frontend && npm run build && cd ..
 
 artifacts:
   files:
     - '**/*'
+  exclude-paths:
+    - node_modules/**
+    - frontend/node_modules/**
