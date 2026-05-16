@@ -153,7 +153,7 @@ function BooksPage() {
 
   const formatBooksForDisplay = (books: Book[]) => {
     if (books.length > 0) {
-      const dataSource: BookDTO[] = [];
+      const dataSource: any[] = [];
       for (const book of books) {
         dataSource.push({
           key: book.id,
