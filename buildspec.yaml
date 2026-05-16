@@ -7,21 +7,21 @@ phases:
 
   pre_build:
     commands:
-      - echo Installing frontend packages
-      - cd frontend
+      - echo Installing root dependencies
       - npm install
 
-      - echo Installing backend packages
-      - cd ../backend
+      - echo Installing frontend dependencies
+      - cd frontend
       - npm install
+      - cd ..
 
   build:
     commands:
-      - echo Building React app
-      - cd ../frontend
+      - echo Building frontend
+      - cd frontend
       - npm run build
+      - cd ..
 
 artifacts:
   files:
     - '**/*'
-  base-directory: frontend/dist
