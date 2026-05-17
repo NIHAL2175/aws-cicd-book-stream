@@ -1,217 +1,332 @@
-# Learn It Right Way
-This project is a full-stack web application built using React js for the frontend, Express js for the backend, and MySQL as the database. The application is designed to demonstrate the implementation of a 3-tier architecture, where the presentation layer (React js), application logic layer (Express js), and data layer (MySQL) are separated into distinct tiers.
+# AWS CI/CD Book Stream
 
+A cloud-integrated full-stack web application deployed using a complete CI/CD pipeline on AWS. This project demonstrates automated build, deployment, scaling and continuous integration practices using AWS DevOps services such as CodePipeline, CodeBuild, CodeDeploy, Elastic Beanstalk, IAM and S3.
 
-## User Interface Screenshots 
-#### Dashboard
-![Dashboard](./frontend/public/ss/dashboard.png)
+---
 
-#### Books
-![Dashboard](./frontend/public/ss/books.png)
+# Project Overview
 
-#### Authors
-![Dashboard](./frontend/public/ss/authors.png)
+AWS CI/CD Book Stream is a scalable web application designed to demonstrate:
 
+- Full-stack web application deployment
+- Continuous Integration and Continuous Deployment (CI/CD)
+- Cloud-native deployment using AWS services
+- Automated build and deployment workflows
+- Infrastructure scalability and service integration
+- Database management using DBeaver with Amazon RDS
 
-## Connecting to private EC2 instance via a bastion host
-1. To change the ssh key permission:
+---
+
+# Technologies Used
+
+## Frontend
+- React.js
+- HTML5
+- CSS3
+- JavaScript
+
+## Backend
+- Node.js
+- Express.js
+
+## Database
+- MySQL
+- Amazon RDS
+- DBeaver (used for database management and SQL operations)
+
+## AWS Services
+- AWS CodePipeline
+- AWS CodeBuild
+- AWS CodeDeploy
+- AWS Elastic Beanstalk
+- Amazon S3
+- AWS IAM
+- Amazon RDS
+
+## Other Tools
+- Git
+- GitHub
+- NPM
+
+---
+
+# AWS Services Used
+
+## AWS CodePipeline
+Used to automate the complete CI/CD workflow.
+
+### Responsibilities
+- Connects GitHub repository
+- Triggers automatic builds
+- Automates deployment workflow
+- Integrates CodeBuild and Elastic Beanstalk
+
+---
+
+## AWS CodeBuild
+Used for automated application build processing.
+
+### Responsibilities
+- Installs dependencies
+- Executes build commands
+- Generates deployment artifacts
+- Uses buildspec.yaml
+
+---
+
+## AWS CodeDeploy
+Used for deployment automation and release management.
+
+### Responsibilities
+- Handles deployment stages
+- Deploys updated application versions
+- Supports automated delivery workflow
+
+---
+
+## AWS Elastic Beanstalk
+Used for application hosting and scaling.
+
+### Responsibilities
+- Deploys web application
+- Manages application environment
+- Handles load balancing and scaling
+- Simplifies infrastructure management
+
+---
+
+## Amazon S3
+Used for artifact and deployment storage.
+
+### Responsibilities
+- Stores pipeline artifacts
+- Maintains deployment packages
+- Supports CI/CD workflow storage
+
+---
+
+## AWS IAM
+Used for secure access and permission management.
+
+### Responsibilities
+- Provides service roles
+- Secures AWS resource communication
+- Controls access between AWS services
+
+---
+
+## Amazon RDS
+Used for managed relational database hosting.
+
+### Responsibilities
+- Stores application data
+- Provides scalable MySQL database
+- Ensures cloud database availability
+
+---
+
+## DBeaver
+Used as the database administration and management tool.
+
+### Responsibilities
+- Connects with Amazon RDS
+- Executes SQL queries
+- Manages database tables
+- Performs database operations and monitoring
+
+---
+
+# CI/CD Pipeline Workflow
+
+```text
+GitHub Repository
+        ↓
+AWS CodePipeline
+        ↓
+AWS CodeBuild
+        ↓
+Build Artifacts stored in S3
+        ↓
+AWS CodeDeploy
+        ↓
+AWS Elastic Beanstalk
+        ↓
+Live Application Deployment
+```
+
+---
+
+# Project Architecture
+
+The project follows a cloud-based multi-tier architecture.
+
+## Presentation Layer
+- React.js frontend
+- User interface and interaction
+
+## Application Layer
+- Node.js + Express.js backend
+- Business logic and APIs
+
+## Data Layer
+- MySQL database hosted in Amazon RDS
+- Database managed using DBeaver
+
+---
+
+# Features
+
+- User-friendly interface
+- Book management system
+- Cloud deployment using AWS
+- Automated CI/CD pipeline
+- Secure IAM role integration
+- Scalable deployment architecture
+- Automated build and deployment
+- Full-stack application structure
+- Centralized cloud database
+- Artifact management using S3
+- Database management using DBeaver
+
+---
+
+# Folder Structure
+
+```text
+aws-cicd-book-stream/
+│
+├── configs/
+├── controllers/
+├── frontend/
+├── routes/
+├── node_modules/
+│
+├── app.js
+├── server.js
+├── buildspec.yaml
+├── db.sql
+├── sanitize_ids.sql
+├── package.json
+├── package-lock.json
+└── README.md
+```
+
+---
+
+# Build Specification
+
+The project uses a buildspec.yaml file for AWS CodeBuild automation.
+
+### Responsibilities
+- Install dependencies
+- Build application
+- Generate deployment artifacts
+- Prepare deployment package
+
+---
+
+# Installation and Setup
+
+## Clone Repository
 
 ```bash
-chmod 400 your_key.pem
+git clone <your-github-repository-url>
 ```
 
-2. To start ssh agent:
+---
+
+## Install Backend Dependencies
 
 ```bash
-eval "$(ssh-agent -s)"  
+npm install
 ```
 
-3. To add key to ssh agent:
+---
+
+## Install Frontend Dependencies
 
 ```bash
-ssh-add your_key.pem
+cd frontend
+npm install
 ```
 
-4. To ssh into bastion host with agent forwarding:
+---
+
+## Configure Database
+
+Import the SQL file:
 
 ```bash
-ssh -A ec2-user@bastion_host_public_ip
+db.sql
 ```
 
-5. To connect private instance from the bastion host:
+Use DBeaver to:
+- Connect with Amazon RDS
+- Execute SQL queries
+- Manage database tables and records
+
+Configure database credentials in the application configuration files.
+
+---
+
+## Run Backend
 
 ```bash
-ssh ec2-user@private_instance_private_ip 
+node server.js
 ```
 
-## Setting up the Data Tier
-#### Install MySQL
-1. To download MySQL repository package:
+---
+
+## Run Frontend
 
 ```bash
-wget https://dev.mysql.com/get/mysql80-community-release-el9-1.noarch.rpm
+npm start
 ```
 
-2. To verify the package download:
+---
 
-```bash
-ls -lrt 
-```
+# Deployment Process
 
-3. To install MySQL repository package:
+The deployment process is fully automated using AWS services.
 
-```bash
-sudo dnf install -y mysql80-community-release-el9-1.noarch.rpm 
-```
+## Deployment Flow
 
-4. To import GPG key: 
+1. Developer pushes code to GitHub
+2. CodePipeline detects changes
+3. CodeBuild starts automated build
+4. Build artifacts are stored in S3
+5. CodeDeploy triggers deployment
+6. Elastic Beanstalk updates application
+7. Application becomes live automatically
 
-```bash
-sudo rpm --import https://repo.mysql.com/RPM-GPG-KEY-mysql-2023 
-```
+---
 
-5. To update package index:
+# Scalability
 
-```bash
-sudo dnf update –y 
-```
+The project supports cloud scalability using Elastic Beanstalk features:
 
-6. To install MySQL server:
+- Auto Scaling
+- Managed Deployment
+- Load Balancing
+- Environment Management
+- Cloud Monitoring
 
-```bash
-sudo dnf install -y mysql-community-server  
-```
+---
 
-7. To start the mysql service:
+# Security
 
-```bash
-sudo systemctl start mysqld
-```
+Security is managed using AWS IAM roles and permissions.
 
-8. To enable mysql to start on boot:
+### Security Features
+- IAM role-based access
+- Secure AWS service communication
+- Controlled deployment permissions
+- Managed cloud access
 
-```bash
-sudo systemctl enable mysqld 
-```
+---
 
-9. To secure the mysql installation:
+# Conclusion
 
-```bash
-sudo grep 'temporary password' /var/log/mysqld.log 
+AWS CI/CD Book Stream demonstrates a complete cloud-integrated DevOps workflow using AWS services. The project successfully automates application build, deployment and scaling processes using a modern CI/CD pipeline architecture.
 
-sudo mysql_secure_installation 
-```
-
-10. To create database and restore data, please refer SQL scripts on [db.sql](./backend/db.sql) file.
-
-
-## Setting up the Application Tier
-#### Install GIT
-```bash
-sudo yum update -y
-
-sudo yum install git -y
-
-git — version
-```
-
-#### Clone repository
-```bash
-git clone https://github.com/learnItRightWay01/react-node-mysql-app.git
-```
-
-#### Install node.js
-1. To install node version manager (nvm)
-```bash
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
-```
-
-2. To load nvm
-```bash
-source ~/.bashrc
-```
-
-3. To use nvm to install the latest LTS version of Node.js
-```bash
-nvm install --lts
-```
-
-4. To test that Node.js is installed and running
-```bash
-node -e "console.log('Running Node.js ' + process.version)"
-```
-
-## Setting up the Presentation Tier
-#### Install GIT
-```
-PLEASE REFER ABOVE
-```
-
-#### Clone repository
-```
-PLEASE REFER ABOVE
-```
-
-#### Install node.js
-```
-PLEASE REFER ABOVE
-```
-
-#### Install NGINX
-```bash
-dnf search nginx
-
-sudo dnf install nginx
-
-sudo systemctl restart nginx 
-
-nginx -v
-```
-
-#### Copy react.js build files
-```bash
-sudo cp -r dist /usr/share/nginx/html 
-```
-
-#### Update NGINX config
-1. Server name and root
-```
-server_name    domain.com www.subdomain.com
-root           /usr/share/nginx/html/dist
-```
-
-2. Setup reverse proxy
-```
-location /api { 
-   proxy_pass http://application_tier_instance_private_ip:3200/api; 
-}
-```
-
-3. Restart NGINX
-```
-sudo systemctl restart nginx
-```
-
-## User data scripts
-#### Install NGINX
-For [AWS solutions - 06](https://youtu.be/snQlL0fJI3Q) and  [AWS solutions - 07](https://youtu.be/eRX1FI2cFi8)
-
-```bash
-#!/bin/bash 
-# Update package lists 
-yum update -y 
-
-# Install Nginx 
-yum install -y nginx 
-
-# Stop and disable default service (optional) 
-systemctl stop nginx 
-systemctl disable nginx 
-
-# Create a custom welcome message file 
-echo "Welcome to Presentation Tier EC2 instance in Availability Zone B." > /usr/share/nginx/html/index.html 
-
-# Start and enable the Nginx service 
-systemctl start nginx 
-systemctl enable nginx
-```
+It provides hands-on experience with cloud deployment, automated workflows, scalable infrastructure management and database administration using DBeaver with Amazon RDS.
